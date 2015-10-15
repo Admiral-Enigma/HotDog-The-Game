@@ -29,6 +29,7 @@ function preload(){
     game.load.image("shopBut", "shopButton.png");
     game.load.image("shopFrame", "shopFrame.png");
     game.load.image("testassets1", "star.png");
+    game.stage.disableVisibilityChange = true;
 }
 
 function create(){
