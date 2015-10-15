@@ -1,17 +1,31 @@
 var game = new Phaser.Game(700, 600, Phaser.AUTO, 'MakeAHotDog', { preload: preload, create: create, update: update });
-var hotdogsMade = 0;
-var maxHotDogs = 10;
+
+//Obj vars
 var hotDog;
-var moneys = 0;
-var moneyText;
-var score;
 var sellButton;
 var bg;
 var hotDogButton;
-var hotdogs;
 var shopButtton;
-var shopOpen = false;
 var shopFrame;
+
+//Booleans
+var shopOpen = false;
+
+//Group vars
+var hotdogs;
+
+// Text vars
+var moneyText;
+var score;
+var totalHotDogsMadeText;
+var totalMoneyMadeText;
+
+//Int vars
+var hotdogsMade = 0;
+var totalHotDogsMade = 0;
+var maxHotDogs = 10;
+var moneys = 0;
+var totalMoneyMade = 0;
 
 //HotDog storage vars
 var hotDogStorageBuyButton;
@@ -36,21 +50,36 @@ function create(){
     hotdogs = game.add.group();
     
     game.input.mouse.capture = true;
+    
+    //The Score
     score = game.add.text(30, 30, "You have made "+hotdogsMade+ " HotDogs", { font: "20px Arial",  fill: '#ffffff' });
+    
+    //The Background
     bg = game.add.sprite(0, 0, 'bg');
+    
+    //How many Moneyz you have
     moneyText = game.add.text(30, 60, ""+moneys+"$", { font: "20px Arial",  fill: '#ffffff' });
     
+    //The Button thats sell your hotdogs
     sellButton = game.add.sprite(20, 700 - 150, "sellButton");
     sellButton.events.onInputDown.add(sellHotDogs, this);
     sellButton.inputEnabled = true;
     
+    //The magic button that makes hotdogs
     hotDogButton = game.add.sprite(150, 700 - 150, "hotdogBut");
     hotDogButton.events.onInputDown.add(addHotDog, this);
     hotDogButton.inputEnabled = true;
     
+    //The Shop button
     shopButtton = game.add.sprite(700 - 110 - 20, 700 - 150, "shopBut");
     shopButtton.events.onInputDown.add(openShop, this);
     shopButtton.inputEnabled = true;
+    
+    //How many Hotdogs you have made in total
+    totalHotDogsMadeText = game.add.text(30, 90, "Total hotdogs made"+totalHotDogsMade, { font: "15px Arial",  fill: '#ffffff' });
+    
+    //How many Money you have made in total
+    totalMoneyMadeText = game.add.text(30, 110, "Total Money earned "+totalMoneyMade,{ font: "15px Arial",  fill: '#ffffff' });
     
 }
 
@@ -59,6 +88,7 @@ function addHotDog(){
         hotDog = game.add.sprite(Math.floor((Math.random() * 800) + 1), Math.floor((Math.random() * 600) + 1), 'hotdog');
         hotDog.scale.set(0.5);
         hotdogsMade++;
+        totalHotDogsMade += 1;
         
         //Update the shop on click
         updateShop();
@@ -130,6 +160,7 @@ function closeShop(){
 
 function sellHotDogs(){
     moneys += hotdogsMade;
+    totalMoneyMade += hotdogsMade;
     hotdogsMade -= hotdogsMade;
     //console.log("FISK");
 }
@@ -139,6 +170,10 @@ function updateText(){
     score.bringToTop();
     moneyText.text = ""+moneys+"$";
     moneyText.bringToTop();
+    totalHotDogsMadeText.bringToTop();
+    totalHotDogsMadeText.text = "Total hotdogs made: "+totalHotDogsMade;
+    totalMoneyMadeText.bringToTop();
+    totalMoneyMadeText.text = "Total Money earned "+totalMoneyMade;
     shopButtton.bringToTop();
     hotDogButton.bringToTop();
     sellButton.bringToTop();
