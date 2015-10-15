@@ -35,6 +35,15 @@ var hotDogStoragePriceText;
 var hotDogStorageAmount = 0; 
 var hotDogStorageAmountText;
 
+//Base shop item
+//var item = {
+//    itemName : "AutoClicker",
+//    price : 100,
+//    image       : "AutoclickerImg",
+//    priceIncrease  : "200",
+//    amount    : "0"
+//};
+
 function preload(){
     game.load.image('hotdog', 'hotDog.png');
     game.load.image("bg", "bg.png");
