@@ -1,0 +1,2 @@
+GJAPI.iGameID = 96964;
+GJAPI.sGameKey = "CENSOR";

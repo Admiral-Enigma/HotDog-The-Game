@@ -35,6 +35,8 @@ var hotDogStoragePriceText;
 var hotDogStorageAmount = 0; 
 var hotDogStorageAmountText;
 
+
+
 //Base shop item
 //var item = {
 //    itemName : "AutoClicker",
