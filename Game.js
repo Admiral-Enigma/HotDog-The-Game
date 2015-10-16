@@ -26,6 +26,7 @@ var totalHotDogsMade = 0;
 var maxHotDogs = 10;
 var moneys = 0;
 var totalMoneyMade = 0;
+var hotDogRate = 0;
 
 //HotDog storage vars
 var hotDogStorageBuyButton;
@@ -35,7 +36,18 @@ var hotDogStoragePriceText;
 var hotDogStorageAmount = 0; 
 var hotDogStorageAmountText;
 
-
+//Auto clicker vars
+var hotDogAutoClickerPriceText;
+var hotDogAutoClickerAmountText;
+var hotDogAutoClickerBuyButton;
+var hotDogAutoClickerText;
+var hotDogAutoClicker = {
+    itemName : "AutoClicker",
+    price : 100,
+    image       : "AutoclickerImg",
+    priceIncrease  : 200,
+    amount    : "0"
+};
 
 //Base shop item
 //var item = {
@@ -53,7 +65,7 @@ function preload(){
     game.load.image("hotdogBut", "hotdogButton.png");
     game.load.image("shopBut", "shopButton.png");
     game.load.image("shopFrame", "shopFrame.png");
-    game.load.image("testassets1", "star.png");
+    game.load.image("buyButton", "star.png");
     game.stage.disableVisibilityChange = true;
 }
 
@@ -92,6 +104,9 @@ function create(){
     //How many Money you have made in total
     totalMoneyMadeText = game.add.text(30, 110, "Total Money earned "+totalMoneyMade,{ font: "15px Arial",  fill: '#ffffff' });
     
+    //Updates the hotdogsMade with the hotdogRate per 5000 ms (1 minut)
+    game.time.events.loop(5000, hotDogRateUpdate, this);
+    
 }
 
 function addHotDog(){
@@ -120,18 +135,32 @@ function drawShop(){
     shopFrame = game.add.sprite(700 - 200 - 20, 600 - 300 - 40 - 30, "shopFrame");
     
     //Test shopItem
-    hotDogStorageBuyButton = game.add.sprite(700 - 200 + 65, 250 + 22 + 20, "testassets1");
+    hotDogStorageBuyButton = game.add.sprite(700 - 200 + 70, 290, "buyButton");
     //The text
     hotDogStorageText = game.add.text(495, 250, "Upgrade hotdog storage", { font: "15px Arial",  fill: '#ffffff' });
     // the buttons input
     hotDogStorageBuyButton.events.onInputDown.add(buyHotdogStorage, this);
     hotDogStorageBuyButton.inputEnabled = true;
     
-    //Price Text
-    hotDogStoragePriceText = game.add.text(495, 300, "Price: "+hotDogStoragePrice, { font: "15px Arial",  fill: '#ffffff' });
-    
-    //How many upgrades you have
+    //How many hotdogStorage upgrades you have
     hotDogStorageAmountText = game.add.text(495, 270, "You have: "+hotDogStorageAmount, { font: "15px Arial",  fill: '#ffffff' });
+    
+    //Price Text
+    hotDogStoragePriceText = game.add.text(495, 290, "Price: "+hotDogStoragePrice, { font: "15px Arial",  fill: '#ffffff' });
+    
+    //Hotdog autoclicker text
+    hotDogAutoClickerText = game.add.text(495, 320, "Upgrade Hotdog Rate", { font: "15px Arial",  fill: '#ffffff' });
+    
+    //How many you have
+    hotDogAutoClickerAmountText = game.add.text(495, 340, "You have: "+hotDogAutoClicker.amount, { font: "15px Arial",  fill: '#ffffff' });
+    
+    //Price tag
+    hotDogAutoClickerPriceText = game.add.text(495, 360, "Price: "+hotDogAutoClicker.price, { font: "15px Arial",  fill: '#ffffff' });
+    
+    //Buy button
+    hotDogAutoClickerBuyButton = game.add.sprite(700 - 200 + 70, 360, "buyButton");
+    hotDogAutoClickerBuyButton.events.onInputDown.add(buyHotDogAutoClicker, this);
+    hotDogAutoClickerBuyButton.inputEnabled = true;
 
 }
 
@@ -141,6 +170,11 @@ function updateShop(){
     hotDogStorageAmountText.bringToTop();
     hotDogStorageBuyButton.bringToTop();
     hotDogStoragePriceText.bringToTop();
+    
+    hotDogAutoClickerAmountText.bringToTop();
+    hotDogAutoClickerBuyButton.bringToTop();
+    hotDogAutoClickerPriceText.bringToTop();
+    hotDogAutoClickerText.bringToTop();
 }
 
 //TODO: Add en utills til at gøre det
@@ -159,6 +193,18 @@ function buyHotdogStorage(){
 
 }
 
+function buyHotDogAutoClicker(){
+    if(moneys >= hotDogAutoClicker.price){
+        hotDogAutoClicker.amount++;
+        moneys -= hotDogAutoClicker.price;
+        hotDogRate += 1;
+        hotDogAutoClicker.price += hotDogAutoClicker.priceIncrease;
+    }
+    
+    hotDogAutoClickerAmountText.text = "You have: "+hotDogAutoClicker.amount;
+    hotDogAutoClickerPriceText.text = "Price: "+hotDogAutoClicker.price;
+}
+
 function closeShop(){
     shopOpen = false;
     shopFrame.kill();
@@ -167,6 +213,11 @@ function closeShop(){
     hotDogStorageBuyButton.kill();
     hotDogStorageAmountText.kill();
     hotDogStoragePriceText.kill();
+    
+    hotDogAutoClickerAmountText.kill();
+    hotDogAutoClickerBuyButton.kill();
+    hotDogAutoClickerPriceText.kill();
+    hotDogAutoClickerText.kill();
 }
 
 function sellHotDogs(){
@@ -188,6 +239,11 @@ function updateText(){
     shopButtton.bringToTop();
     hotDogButton.bringToTop();
     sellButton.bringToTop();
+}
+function hotDogRateUpdate(){
+    if(hotdogsMade < maxHotDogs){
+        hotdogsMade += hotDogRate;
+    }
 }
 
 function update(){
